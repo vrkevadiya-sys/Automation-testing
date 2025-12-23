@@ -1,0 +1,162 @@
+from selenium import webdriver
+from selenium.webdriver.common.by import By
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.chrome.service import Service
+from selenium.webdriver.chrome.options import Options
+from webdriver_manager.chrome import ChromeDriverManager
+import os
+import time
+
+# --------------------------------------------------
+# CHROMEDRIVER SETUP
+# --------------------------------------------------
+driver_path = ChromeDriverManager().install()
+os.chmod(driver_path, 0o755)
+service = Service(driver_path)
+
+# --------------------------------------------------
+# CHROME OPTIONS
+# --------------------------------------------------
+options = Options()
+options.add_argument("--start-maximized")
+options.add_argument("--disable-blink-features=AutomationControlled")
+options.add_experimental_option("excludeSwitches", ["enable-automation"])
+options.add_experimental_option("useAutomationExtension", False)
+
+driver = webdriver.Chrome(service=service, options=options)
+wait = WebDriverWait(driver, 40)
+
+# --------------------------------------------------
+# STEP 1: OPEN LOGIN PAGE
+# --------------------------------------------------
+driver.get("https://dev2.scanbo.com/authentication/login")
+
+# --------------------------------------------------
+# STEP 2: ENTER MOBILE NUMBER
+# --------------------------------------------------
+wait.until(
+    EC.presence_of_element_located((By.XPATH, "//input[@type='tel']"))
+).send_keys("7878787871")
+
+# --------------------------------------------------
+# STEP 3: CLICK DISCLAIMER CHECKBOX
+# --------------------------------------------------
+checkbox = wait.until(
+    EC.element_to_be_clickable((By.XPATH, "//label[contains(.,'Disclaimer')]"))
+)
+driver.execute_script("arguments[0].click();", checkbox)
+print("✅ Disclaimer clicked")
+
+# --------------------------------------------------
+# STEP 4: WAIT FOR DISCLAIMER POPUP
+# --------------------------------------------------
+popup = wait.until(
+    EC.presence_of_element_located((By.XPATH, "//div[@role='dialog']"))
+)
+print("✅ Disclaimer popup opened")
+
+# --------------------------------------------------
+# STEP 5: SCROLL DISCLAIMER (FIXED & SAFE)
+# --------------------------------------------------
+driver.execute_script("""
+let dialog = document.querySelector("[role='dialog']");
+let scrollable = [...dialog.querySelectorAll("*")]
+  .find(el => el.scrollHeight > el.clientHeight);
+
+if (scrollable) {
+  scrollable.scrollTop = scrollable.scrollHeight;
+  scrollable.dispatchEvent(new Event('scroll'));
+}
+""")
+time.sleep(1)
+print("✅ Disclaimer scrolled")
+
+# --------------------------------------------------
+# STEP 6: CLICK AGREE
+# --------------------------------------------------
+wait.until(
+    EC.element_to_be_clickable((By.XPATH, "//button[contains(text(),'Agree')]"))
+).click()
+print("✅ Agree clicked")
+
+# --------------------------------------------------
+# STEP 7: SEND OTP
+# --------------------------------------------------
+wait.until(
+    EC.element_to_be_clickable((By.XPATH, "//button[contains(text(),'Send OTP')]"))
+).click()
+print("✅ Send OTP clicked")
+
+# --------------------------------------------------
+# STEP 8: WAIT FOR OTP INPUT
+# --------------------------------------------------
+wait.until(
+    EC.presence_of_element_located(
+        (By.XPATH, "//input[@type='tel' or @inputmode='numeric']")
+    )
+)
+print("✅ OTP screen loaded")
+
+# --------------------------------------------------
+# STEP 9: ENTER OTP (ANTI-STALE)
+# --------------------------------------------------
+from selenium.webdriver.common.by import By
+import time
+
+otp = "654320"   # your OTP
+
+# wait a bit to ensure OTP boxes are loaded
+time.sleep(2)
+
+# get all 6 OTP input boxes
+otp_boxes = driver.find_elements(By.XPATH, "//input")
+
+# enter OTP digit by digit
+for i in range(6):
+    otp_boxes[i].clear()
+    otp_boxes[i].send_keys(otp[i])
+
+
+print("✅ OTP entered")
+
+# --------------------------------------------------
+# STEP 10: VERIFY OTP
+# --------------------------------------------------
+wait.until(
+    EC.element_to_be_clickable((By.XPATH, "//button[contains(text(),'Verify')]"))
+).click()
+print("✅ OTP verified")
+
+# --------------------------------------------------
+# STEP 11: WAIT FOR PROFILE SELECTION PAGE
+# --------------------------------------------------
+wait.until(
+    EC.presence_of_element_located((By.XPATH, "//*[normalize-space()='I am']"))
+)
+print("✅ Profile selection page loaded")
+
+# --------------------------------------------------
+# STEP 12: CLICK PATIENT PROFILE
+# --------------------------------------------------
+patient = wait.until(
+    EC.element_to_be_clickable(
+        (By.XPATH, "//div[.//text()[normalize-space()='Patient']]")
+    )
+)
+driver.execute_script("arguments[0].click();", patient)
+print("✅ Patient profile selected")
+
+# --------------------------------------------------
+# STEP 13: WAIT FOR PATIENT REGISTRATION STEP 1
+# --------------------------------------------------
+wait.until(
+    EC.presence_of_element_located(
+        (By.XPATH, "//*[contains(text(),'Patient Registration') or contains(text(),'Basic Details')]")
+    )
+)
+print("🎉 FLOW COMPLETED SUCCESSFULLY")
+
+time.sleep(10)
+# driver.quit()
+
