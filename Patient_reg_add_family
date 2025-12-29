@@ -83,23 +83,6 @@ add_new_btn = wait.until(
 add_new_btn.click()
 print("✅ + Add New clicked")
 
-# # ==================================================
-# # CLICK + ADD NEW (CENTER OF PAGE)
-# # ==================================================
-
-# add_new_btn = wait.until(
-#     EC.element_to_be_clickable(
-#         (
-#             By.XPATH,
-#             "//button[.//text()[normalize-space()='+ Add New']]"
-#             " | //*[normalize-space()='+ Add New']"
-#         )
-#     )
-# )
-# add_new_btn.click()
-
-# print("✅ + Add New clicked (center of page)")
-
 # ==================================================
 # WAIT FOR ADD FAMILY MEMBER – PROFILE PAGE
 # ==================================================
