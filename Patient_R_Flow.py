@@ -280,48 +280,7 @@ DOB_VALUE = "22/12/1990"   # DD/MM/YYYY format
 # DATE OF BIRTH
 # --------------------------------------------------
 
-# --------------------------------------------------
-# DOB INPUT (AUTO → AGE AUTO UPDATE)
-# --------------------------------------------------
-# --------------------------------------------------
-# DOB (REACT SAFE — AUTO AGE)
-# --------------------------------------------------
-#AGE_VALUE = "25"
-#   EC.element_to_be_clickable((
- #       By.XPATH,
-  #      "//label[contains(text(),'Age')]/following::input[1]"
-    #))
-#)
 
-#age_input.click()
-#time.sleep(0.5)
-
-#ge_input.send_keys(Keys.CONTROL + "a")
-#age_input.send_keys(Keys.BACKSPACE)
-
-# Slow typing (important)
-#for ch in AGE_VALUE:
- #   age_input.send_keys(ch)
-  #  time.sleep(0.2)
-
-# Force React state update
-#driver.execute_script("""
-#arguments[0].dispatchEvent(new Event('input', { bubbles: true }));
-#arguments[0].dispatchEvent(new Event('change', { bubbles: true }));
-#arguments[0].blur();
-#""", age_input)
-
-#print("Age entered:", AGE_VALUE)
-#time.sleep(2)
-#dob_input = wait.until(
-#    EC.presence_of_element_located((
- #       By.XPATH,
-  #      "//label[contains(text(),'Birth')]/following::input[1]"
-   # ))
-#)
-
-#dob_value = dob_input.get_attribute("value")
-#print("Auto calculated DOB:", dob_value)
 dob_input = wait.until(
     EC.element_to_be_clickable((
         By.XPATH,
@@ -354,17 +313,7 @@ print("DOB entered and React accepted it")
 # --------------------------------------------------
 # VERIFY AGE AUTO CALCULATED (READ ONLY)
 # --------------------------------------------------
-#age_input = wait.until(
- #   EC.presence_of_element_located((
-  #      By.XPATH, "//input[contains(@placeholder,'Age') or contains(@class,'age')]"
-   # ))
-#)
 
-#print("Auto calculated Age:", age_input.get_attribute("value"))
-# --------------------------------------------------
-# NEXT BUTTON
-# --------------------------------------------------
-# give UI time to auto-calculate age
 time.sleep(2)
 
 next_btn = wait.until(
