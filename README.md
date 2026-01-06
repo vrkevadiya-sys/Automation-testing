@@ -131,3 +131,31 @@ The script keeps the browser open on errors. To manually close:
 - Browser will stay open on errors for debugging
 - Remove `time.sleep()` calls once selectors are correct and timing is stable
 
+
+## SonarQube Code Analysis
+
+This project is configured for code quality analysis using SonarQube.
+
+### Prerequisites
+
+- **SonarQube Scanner** installed on your system. If not installed, you can download it from [SonarQube Documentation](https://docs.sonarqube.org/latest/analysis/scan/sonarscanner/).
+
+### Setup and Running Analysis
+
+1.  **Generate a Token**:
+    - Log in to your SonarQube server.
+    - Go to **My Account** > **Security**.
+    - Generate a new token and copy it.
+
+2.  **Configure Connection**:
+    - Open `sonar-project.properties`.
+    - Set `sonar.host.url` to your SonarQube server address.
+    - Set `sonar.login` to your generated token.
+
+3.  **Run Scanner**:
+    ```bash
+    sonar-scanner
+    ```
+
+4.  **View Results**:
+    Navigate to your SonarQube dashboard to see the analysis report.

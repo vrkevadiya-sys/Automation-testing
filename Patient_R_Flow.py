@@ -280,7 +280,6 @@ DOB_VALUE = "22/12/1990"   # DD/MM/YYYY format
 # DATE OF BIRTH
 # --------------------------------------------------
 
-
 dob_input = wait.until(
     EC.element_to_be_clickable((
         By.XPATH,
